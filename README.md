@@ -1,6 +1,9 @@
 # dssh
 
-Inspired by https://github.com/hypersleep/easyssh/
+Inspired by
+* https://github.com/hypersleep/easyssh/
+* https://github.com/jniltinho/easyssh
+* https://github.com/bearburger/easyssh/
 
 ### Installation ###
 
