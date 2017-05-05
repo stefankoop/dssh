@@ -1,6 +1,6 @@
 # dssh
 
-Inspired by
+Inspired by/Taken from:
 * https://github.com/hypersleep/easyssh/
 * https://github.com/jniltinho/easyssh
 * https://github.com/bearburger/easyssh/
