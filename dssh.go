@@ -6,6 +6,8 @@ package dssh
 
 import (
 	"bufio"
+	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -101,6 +103,47 @@ func (ssh_conf *MakeConfig) connect() (*ssh.Session, error) {
 	}
 
 	return session, nil
+}
+
+type SSHOut struct {
+	Command    string
+	StdOut     string
+	StdErr     string
+	ExitStatus string
+}
+
+func (ssh_conf *MakeConfig) RunSimple(command string) (*SSHOut, error) {
+	// connect to remote host
+	session, err := ssh_conf.connect()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// prepare outputs
+	var stderr, stdout bytes.Buffer
+	session.Stdout, session.Stderr = &stdout, &stderr
+
+	if err := session.Start(command); err != nil {
+		return &SSHOut{}, errors.New(err.Error())
+	}
+
+	// fetch exit status
+	var exitStatus string
+
+	if err := session.Wait(); err != nil {
+		exitStatus = err.Error()
+	} else {
+		exitStatus = "0"
+	}
+
+	ret := &SSHOut{
+		Command:    command,
+		StdErr:     stderr.String(),
+		StdOut:     stdout.String(),
+		ExitStatus: exitStatus,
+	}
+
+	return ret, nil
 }
 
 // Stream returns one channel that combines the stdout and stderr of the command
