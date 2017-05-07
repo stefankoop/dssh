@@ -116,7 +116,7 @@ func (ssh_conf *MakeConfig) RunSimple(command string) (*SSHOut, error) {
 	// connect to remote host
 	session, err := ssh_conf.connect()
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
 	// prepare outputs
